@@ -6,14 +6,11 @@ import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
      constructor(public location: Location) {}
 
-    ngOnInit(){
-    }
-
-    isMap(path){
+    isMap(path) {
       var titlee = this.location.prepareExternalUrl(this.location.path());
       titlee = titlee.slice( 1 );
       if(path == titlee){
