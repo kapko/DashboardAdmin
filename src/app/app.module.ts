@@ -43,7 +43,7 @@ import { UpgradeComponent } from './upgrade/upgrade.component';
     SidebarModule,
     RouterModule,
     AppRoutingModule,
-    LbdModule
+    LbdModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

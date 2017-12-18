@@ -1,0 +1,33 @@
+app-post-create {
+    .customClass {
+        background-color: #fff;
+        border: 1px solid #eee;
+        border-radius: 3px;
+        width: 100%;
+    
+        .img-ul-upload {
+            border-radius: 3px;
+            display: block!important;
+            width: 250px;
+            text-align: center;
+            float: none!important;
+            margin: 0 auto;
+            background-color: #fff !important;
+        }
+        span {
+            color: #000;
+            text-transform: none;
+        }
+        .img-ul-drag-box-msg, .img-ul-clear {
+            display: none!important;
+        }
+        .img-ul-container {
+            border: 1px solid #eee;
+            background-color: #fff!important;
+        }
+    }
+    .foto-descr {
+        font-size: 11px!important;
+        text-transform: none;
+    }
+}
