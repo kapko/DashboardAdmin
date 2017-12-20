@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { Post } from '../../interfaces/post.interface';
 import { PostService } from 'app/posts/post.service';
+import { Promise } from 'firebase/app';
+
+export interface ImageStructure {
+  fileName: string;
+  file: string;
+}
 
 @Component({
   selector: 'app-post-create',
@@ -17,25 +23,45 @@ export class PostCreateComponent {
     typeOfRoom: 'elite',
   };
 
+  images: ImageStructure[] = [];
+
   constructor(
     private postService: PostService,
   ) {}
 
+  // upload files
   onUploadFinished(event: any): void {
-    this.postService.uploadPicture(event.file.name, event.src)
-      .then(res => {
-        console.log('picture', res.downloadURL);
-      });
+    this.images.push({fileName: event.file.name, file: event.src});
   }
 
+  // remove images from array
   onRemoved(event: any): void {
-    this.postService.deletePicture(event.file.name);
+    this.images.forEach(item => {
+      if (item.fileName === event.file.name) {
+        this.images.splice(this.images.indexOf(item), 1);
+      }
+    });
+  }
+
+  // return promise of array
+  uploadImages(): Array<any> {
+    const urls = [];
+
+    this.images.forEach(image => {
+      urls.push(
+        this.postService.uploadPicture(image.fileName, image.file).then(res => res.downloadURL)
+      );
+    });
+
+    return urls;
   }
 
   submitForm(data: Post): void {
-    // console.log(data);
-
-    // this.postService.createPost(data);
+    Promise.all(this.uploadImages())
+      .then(res => {
+        data.created = + new Date();
+        data.images = res;
+        this.postService.createPost(data);
+      });
   }
-
 }

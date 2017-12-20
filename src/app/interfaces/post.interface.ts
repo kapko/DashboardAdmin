@@ -13,4 +13,6 @@ export interface Post {
   currency: 'dollar' | 'euro' | 'som';
   phone: number;
   whatsapp: number;
+  images: any;
+  created: number;
 }
