@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PostService } from '../post.service';
 
 declare interface TableData {
   headerRow: string[];
@@ -14,8 +15,13 @@ export class PostListComponent {
   public tableData1: TableData;
   public tableData2: TableData;
 
-  constructor() {
-    console.log('asdas');
+  constructor(
+    private postService: PostService,
+  ) {
+    this.postService.getListPosts()
+      .subscribe(posts => {
+        console.log('posts = ', posts);
+      });
   }
 
   ngOnInit() {

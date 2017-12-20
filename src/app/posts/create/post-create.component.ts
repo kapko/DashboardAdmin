@@ -1,18 +1,6 @@
 import { Component } from '@angular/core';
-
-export interface Post {
-  title: string;
-  description: string;
-  accountType: 'owner' | 'agent';
-  sellingType: 'rent' | 'sell' | 'buy';
-  forSell?: 'room' | 'area' | 'house' | 'camp' | 'office' | 'business' | 'other';
-  typeOfRoom?: 'elite' | '105' | '104' | '106' | 'old' | 'pso';
-  address: string;
-  flatCount: number;
-  area: string;
-  floor: string;
-  fixes?: 'euro' | 'design' | 'none' | 'simple';
-}
+import { Post } from '../../interfaces/post.interface';
+import { PostService } from 'app/posts/post.service';
 
 @Component({
   selector: 'app-post-create',
@@ -20,9 +8,34 @@ export interface Post {
 })
 
 export class PostCreateComponent {
-  data: Post;
+  // DEFAULT OPTIONS
+  defaultData = {
+    accountType: 'owner',
+    sellingType: 'sell',
+    forSell: 'room',
+    currency: 'dollar',
+    typeOfRoom: 'elite',
+  };
 
-  constructor() {
-    console.log('created');
+  constructor(
+    private postService: PostService,
+  ) {}
+
+  onUploadFinished(event: any): void {
+    this.postService.uploadPicture(event.file.name, event.src)
+      .then(res => {
+        console.log('picture', res.downloadURL);
+      });
   }
+
+  onRemoved(event: any): void {
+    this.postService.deletePicture(event.file.name);
+  }
+
+  submitForm(data: Post): void {
+    // console.log(data);
+
+    // this.postService.createPost(data);
+  }
+
 }

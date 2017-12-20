@@ -6,15 +6,15 @@
                     <div class="header">
                         <h4 class="title">Post Create</h4>
                         <br>
-                        <a [routerLink]="['/admin/posts']">Posts list</a>
+                        <a [routerLink]="['/admin/posts']">Posts list </a>
                     </div>
                     <div class="content">
-                        <form>
+                        <form (ngSubmit)="submitForm(postForm.value)" #postForm="ngForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Тип аккаунта</label>
-                                        <select class="form-control">
+                                        <select [(ngModel)]="defaultData.accountType" #accountType="ngModel" name="accountType" class="form-control">
                                             <option value="owner">Владелец</option>
                                             <option value="agent">Агенство</option>
                                         </select>
@@ -23,9 +23,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Тип сделки</label>
-                                        <select class="form-control">
-                                            <option value="rent">Аренда</option>
+                                        <select [(ngModel)]="defaultData.sellingType" #sellingType="ngModel" name="sellingType" class="form-control">
                                             <option value="sell">Продажа</option>
+                                            <option value="rent">Аренда</option>
                                             <option value="buy">Купля</option>
                                         </select>
                                     </div>
@@ -36,7 +36,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Что продаете?</label>
-                                        <select class="form-control" >
+                                        <select [(ngModel)]="defaultData.forSell" #forSell="ngModel" name="forSell" class="form-control" >
                                             <option value="room">Квартира</option>
                                             <option value="house">Дом</option>
                                             <option value="area">Участок</option>
@@ -53,7 +53,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Тип</label>
-                                        <select class="form-control" >
+                                        <select [(ngModel)]="defaultData.typeOfRoom" #typeOfRoom="ngModel" name="typeOfRoom" class="form-control" >
                                             <option value="elite">Элитка</option>
                                             <option value="105">105</option>
                                             <option value="106">106</option>
@@ -71,7 +71,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Заголовок</label>
-                                        <input type="text" class="form-control" placeholder="Пример: Продается 2-х комнатная квартира">
+                                        <input ngModel #title="ngModel" name="title" type="text" class="form-control" placeholder="Пример: Продается 2-х комнатная квартира" required>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Адресс</label>
-                                        <input type="text" class="form-control" placeholder="Пример: город Бишкек, Абдрахманова дом 18">
+                                        <input ngModel #address="ngModel" name="address" type="text" required class="form-control" placeholder="Пример: город Бишкек, Абдрахманова дом 18">
                                     </div>
                                 </div>
                             </div>
@@ -90,14 +90,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Кол. комнат</label>
-                                        <input type="number" class="form-control" placeholder="">
+                                        <label>Количество комнат</label>
+                                        <input ngModel #flatCount="ngModel" name="flatCount" type="text" required type="number" class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Площадь</label>
-                                        <input type="number" class="form-control" placeholder="m2">
+                                        <input ngModel #area="ngModel" name="area" required type="number" class="form-control" placeholder="m2">
                                     </div>
                                 </div>
                             </div>
@@ -106,13 +106,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Этаж</label>
-                                        <input type="number" class="form-control" placeholder="">
+                                        <input ngModel #floor="ngModel" name="floor" type="number" class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Ремонт</label>
-                                        <select class="form-control" >
+                                        <select ngModel #fixes="ngModel" name="fixes" class="form-control" >
                                             <option value="simple">Косметический</option>
                                             <option value="euro">Евро</option>
                                             <option value="design">Дизайнерский</option>
@@ -130,6 +130,8 @@
                                     <image-upload
                                         [max]="10"
                                         [buttonCaption]="'Выберите файл'"
+                                        (uploadFinished)="onUploadFinished($event)"
+                                        (removed)="onRemoved($event)"
                                         [dropBoxMessage]="'Загрузить фотографии'"
                                         [extensions]="['jpg','png','gif']"
                                         [class]="'customClass'">
@@ -141,7 +143,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Описание</label>
-                                        <textarea rows="5" class="form-control" placeholder="Введите текст"></textarea>
+                                        <textarea ngModel #description="ngModel" name="description" required rows="5" class="form-control" placeholder="Введите текст"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -150,13 +152,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Цена</label>
-                                        <input class="form-control" type="text">
+                                        <input ngModel #price="ngModel" name="price" required class="form-control" type="text">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Валюта</label>
-                                        <select class="form-control" >
+                                        <select [(ngModel)]="defaultData.currency" #currency="ngModel" name="currency" required class="form-control" >
                                             <option value="dollar">$(USA)</option>
                                             <option value="som">Сом</option>
                                             <option value="euro">Евро</option>
@@ -169,16 +171,16 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Ваш номер телефона</label>
-                                        <input type="text" class="form-control" placeholder="Пример: 0700 000 000">
+                                        <input required ngModel #phone="ngModel" name="phone" type="number" class="form-control" min="8" max="11" placeholder="Пример: 0700 000 000">
                                     </div>
                                     <div class="form-group">
                                         <label>Воцап</label>
-                                        <input type="text" class="form-control" placeholder="Пример: 0700 000 001">
+                                        <input required ngModel #whatsapp="ngModel" name="whatsapp" type="number" class="form-control" min="8" placeholder="Пример: 0700 000 001">
                                     </div>
                                 </div>
                             </div>
 
-                            <button class="zippy" type="submit" class="btn btn-info btn-fill pull-right">Разместить объявление</button>
+                            <button [disabled]="!postForm.form.valid" class="zippy" type="submit" class="btn btn-info btn-fill pull-right">Разместить объявление</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
