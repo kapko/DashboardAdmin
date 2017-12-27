@@ -21,6 +21,10 @@ const routes: Routes = [
       {
         path: 'posts',
         loadChildren: './posts/post.module#PostsModule'
+      },
+      {
+        path: 'instagram',
+        loadChildren: './instagram/instagram.module#InstagramModule'
       }
     ]
   },
