@@ -30,6 +30,35 @@ export class PostService {
       .push(postData);
   }
 
+  thumbnailify(base64Image, targetSize, callback) {
+    let img = new Image(),
+      canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d');
+
+    img.onload = function() {
+      let width = img.width,
+        height = img.height,
+        canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+
+      canvas.width = canvas.height = targetSize;
+
+      ctx.drawImage(
+        img,
+        width > height ? (width - height) / 2 : 0,
+        height > width ? (height - width) / 2 : 0,
+        width > height ? height : width,
+        width > height ? height : width,
+        0, 0,
+        targetSize, targetSize
+      );
+
+      callback(canvas.toDataURL());
+    };
+
+    img.src = base64Image;
+  };
+
   // upload picture fileName path, return Promise
   uploadPicture(fileName: string, file: string): Promise<any> {
     return firebase

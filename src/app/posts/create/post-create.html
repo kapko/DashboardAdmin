@@ -11,24 +11,27 @@
                     <div class="content">
                         <form (ngSubmit)="submitForm(postForm.value)" #postForm="ngForm">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Тип аккаунта</label>
-                                        <select [(ngModel)]="defaultData.accountType" #accountType="ngModel" name="accountType" class="form-control">
-                                            <option value="owner">Владелец</option>
-                                            <option value="agent">Агенство</option>
-                                        </select>
-                                    </div>
+                                <div class="col-md-12 form-group">
+                                    <p>Тип аккаунта</p>
+                                    <input type="radio" [(ngModel)]="defaultData.accountType" id="owner"
+                                    name="accountType" value="owner">
+                                    <label for="owner">Владелец</label>
+
+                                    <input type="radio" [(ngModel)]="defaultData.accountType" id="agent"
+                                    name="accountType" value="agent">
+                                    <label for="agent">Агенство</label>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Тип сделки</label>
-                                        <select [(ngModel)]="defaultData.sellingType" #sellingType="ngModel" name="sellingType" class="form-control">
-                                            <option value="sell">Продажа</option>
-                                            <option value="rent">Аренда</option>
-                                            <option value="buy">Купля</option>
-                                        </select>
-                                    </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <p>Тип сделки</p>
+                                    <input type="radio" [(ngModel)]="defaultData.sellingType" id="sell"
+                                    name="sellingType" value="sell">
+                                    <label for="sell">Продаю</label>
+
+                                    <input type="radio" [(ngModel)]="defaultData.sellingType" id="rent" name="sellingType" value="rent">
+                                    <label for="rent">Сдаю</label>
                                 </div>
                             </div>
 
@@ -36,30 +39,19 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Что продаете?</label>
-                                        <select [(ngModel)]="defaultData.forSell" #forSell="ngModel" name="forSell" class="form-control" >
-                                            <option value="room">Квартира</option>
-                                            <option value="house">Дом</option>
-                                            <option value="area">Участок</option>
-                                            <option value="camp">Дача</option>
-                                            <option value="office">Офис</option>
-                                            <option value="business">Под бизнес</option>
-                                            <option value="other">Не жилое</option>
+                                        <select [(ngModel)]="defaultData.forSell" name="forSell" class="form-control" >
+                                            <option *ngFor="let sell of forSell" [value]="sell.value">{{ sell.name }}</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div *ngIf="defaultData.forSell === 'room' || defaultData.forSell === 'forShortTime'" class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Тип</label>
-                                        <select [(ngModel)]="defaultData.typeOfRoom" #typeOfRoom="ngModel" name="typeOfRoom" class="form-control" >
-                                            <option value="elite">Элитка</option>
-                                            <option value="105">105</option>
-                                            <option value="106">106</option>
-                                            <option value="104">104</option>
-                                            <option value="old">Хрущевка</option>
-                                            <option value="pso">ПСО(под сам. отделку)</option>
+                                        <select [(ngModel)]="defaultData.typeOfRoom" name="typeOfRoom" class="form-control" >
+                                            <option *ngFor="let item of typeOfRooms" [value]="item.value">{{ item.name }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -68,56 +60,66 @@
                             <hr>
 
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Заголовок</label>
-                                        <input ngModel #title="ngModel" name="title" type="text" class="form-control" placeholder="Пример: Продается 2-х комнатная квартира" required>
+                                        <label>Количество комнат</label>
+                                        <input [textMask]="{mask: areaMask}" ngModel name="flatCount" type="text" required type="text" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                  <div class="form-group squere">
+                                      <label>Площадь</label>
+                                      <div class="floor">
+                                        <input [textMask]="{mask: areaMask}" ngModel name="area" type="text">
+                                        <b> m&#178;</b>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-4" *ngIf="defaultData.forSell == 'house' || 
+                                defaultData.forSell == 'area' || defaultData.forSell == 'other' || defaultData.forSell == 'business'">
+                                  <div class="form-group squere">
+                                    <label>Площадь участка</label>
+                                    <div class="floor">
+                                      <input required [textMask]="{mask: areaMask}" name="areaOfHouse" class="form-control" type="text"/>
+                                      <b>cот.</b>
+                                    </div>
+                                  </div>
+                                </div>
+
+                            </div>
+                            
+                            <div class="row" *ngIf="defaultData.forSell !== 'area'">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Этаж</label>
+                                        <div class="floor">
+                                            <input ngModel [textMask]="{mask: areaMask}" name="floor" required type="text">
+                                            <span *ngIf="defaultData.forSell === 'room' || defaultData.forSell === 'forShortTime' ||
+                                            defaultData.forSell === 'office'">
+                                                <b> из </b>
+                                                <input ngModel [textMask]="{mask: areaMask}" required name="floorOf" type="text">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="defaultData.typeOfRoom !== 'pso'" class="col-md-9">
+                                    <div class="form-group">
+                                        <p>Ремонт (Состояние)</p>
+                                        <span *ngFor="let item of typeOfFixes">
+                                            <input [(ngModel)]="defaultData.fixes" type="radio" id="{{item.value}}" name="fixes" [value]="item.value">
+                                            <label for="{{item.value}}">{{item.name}}</label>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+
+                            <hr>
                             
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Адресс</label>
-                                        <input ngModel #address="ngModel" name="address" type="text" required class="form-control" placeholder="Пример: город Бишкек, Абдрахманова дом 18">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Количество комнат</label>
-                                        <input ngModel #flatCount="ngModel" name="flatCount" type="text" required type="number" class="form-control" placeholder="">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Площадь</label>
-                                        <input ngModel #area="ngModel" name="area" required type="number" class="form-control" placeholder="m2">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Этаж</label>
-                                        <input ngModel #floor="ngModel" name="floor" type="number" class="form-control" placeholder="">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Ремонт</label>
-                                        <select ngModel #fixes="ngModel" name="fixes" class="form-control" >
-                                            <option value="simple">Косметический</option>
-                                            <option value="euro">Евро</option>
-                                            <option value="design">Дизайнерский</option>
-                                            <option value="none">Без ремонта</option>
-                                        </select>
+                                        <input ngModel name="address" type="text" required class="form-control" placeholder="Пример: город Бишкек, Абдрахманова дом 18">
                                     </div>
                                 </div>
                             </div>
@@ -143,26 +145,34 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Описание</label>
-                                        <textarea ngModel #description="ngModel" name="description" required rows="5" class="form-control" placeholder="Введите текст"></textarea>
+                                        <textarea ngModel name="description" required rows="5" class="form-control" placeholder="Введите текст"></textarea>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Цена</label>
-                                        <input ngModel #price="ngModel" name="price" required class="form-control" type="text">
+                                        <input [textMask]="{mask: numberMask, guide: false}" ngModel name="price" class="price" required type="text"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p>Валюта</p>
+                                        <span *ngFor="let item of typeOfCurrency">
+                                            <input [(ngModel)]="defaultData.currency" type="radio" id="{{item.value}}" name="currency" [value]="item.value">
+                                            <label for="{{item.value}}">{{item.name}}</label>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Валюта</label>
-                                        <select [(ngModel)]="defaultData.currency" #currency="ngModel" name="currency" required class="form-control" >
-                                            <option value="dollar">$(USA)</option>
-                                            <option value="som">Сом</option>
-                                            <option value="euro">Евро</option>
-                                        </select>
+                                        <p>Продажа возможна</p>
+                                        <span *ngFor="let item of typeOfPlan">
+                                            <input ngModel type="checkbox" id="{{item.value}}" name="{{item.value}}" [value]="item.value">
+                                            <label for="{{item.value}}">{{item.name}}</label>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -170,19 +180,21 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Ваш номер телефона</label>
-                                        <input required ngModel #phone="ngModel" name="phone" type="number" class="form-control" min="8" max="11" placeholder="Пример: 0700 000 000">
+                                        <label>Ваш номер телефона <br />  <i class="foto-descr">Подсказка для ввода телефона</i></label>
+                                        <input required ngModel [textMask]="{mask: phoneMask, placeholderChar: '\u2000'}" ngModel name="phone" class="form-control" type="text" placeholder="(554) 555-555"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Дополнительный номер телефона</label>
+                                        <input required ngModel [textMask]="{mask: phoneMask, placeholderChar: '\u2000'}" ngModel name="extraPhone" class="form-control" type="text" placeholder="(551) 555-555"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Воцап</label>
-                                        <input required ngModel #whatsapp="ngModel" name="whatsapp" type="number" class="form-control" min="8" placeholder="Пример: 0700 000 001">
+                                        <input required ngModel [textMask]="{mask: phoneMask, placeholderChar: '\u2000'}" ngModel name="whatsapp" class="form-control" type="text" placeholder="(551) 555-556"/>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- <button [disabled]="!postForm.form.valid" class="zippy" type="submit" class="btn btn-info btn-fill pull-right">Разместить объявление</button>
-                            <div class="clearfix"></div> -->
-                            <button class="zippy" type="submit" class="btn btn-info btn-fill pull-right">Разместить объявление</button>
+                            <button [disabled]="!postForm.form.valid" class="zippy" type="submit" class="btn btn-info btn-fill pull-right">Разместить объявление</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>

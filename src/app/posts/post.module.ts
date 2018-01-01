@@ -12,6 +12,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 // services
 import { PostService } from 'app/posts/post.service';
+import { TextMaskModule } from 'angular2-text-mask';
 
 const config = {
   apiKey: 'AIzaSyDlvb_n_HrLNv84m6WE8SdrMU9LP5-88uU',
@@ -31,6 +32,7 @@ const config = {
     ImageUploadModule.forRoot(),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    TextMaskModule,
     AngularFireModule.initializeApp(config),
   ],
   providers: [
