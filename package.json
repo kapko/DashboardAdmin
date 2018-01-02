@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^1.0.0-beta.2",
     "@angular/common": "^4.0.0",
     "@angular/compiler": "^4.0.0",
     "@angular/core": "^4.0.0",
@@ -20,6 +21,8 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
+    "@types/googlemaps": "^3.30.3",
+    "angular2-google-place": "^2.0.2",
     "angular2-image-upload": "^1.0.0-rc.0",
     "angular2-text-mask": "^8.0.4",
     "angularfire2": "4.0.0-rc.1",

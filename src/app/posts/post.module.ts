@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AgmCoreModule } from '@agm/core';
 
 import { PostListComponent } from 'app/posts/posts-list/posts-list.component';
 import { PostsRoutingModule } from 'app/posts/post.router';
@@ -13,6 +14,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 // services
 import { PostService } from 'app/posts/post.service';
 import { TextMaskModule } from 'angular2-text-mask';
+import { GooglePlaceModule } from 'angular2-google-place';
 
 const config = {
   apiKey: 'AIzaSyDlvb_n_HrLNv84m6WE8SdrMU9LP5-88uU',
@@ -32,6 +34,10 @@ const config = {
     ImageUploadModule.forRoot(),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBFEC9dv1dCcp9TvfXuoinfL2B_IYJSPz0',
+      libraries: ['places']
+    }),
     TextMaskModule,
     AngularFireModule.initializeApp(config),
   ],
