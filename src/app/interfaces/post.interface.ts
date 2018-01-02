@@ -16,6 +16,8 @@ export interface Post {
   whatsapp: number;
   images: any;
   tumbnails: any;
+  lat: number;
+  lng: number;
   created: number;
-  plan: 'ipoteka' | 'rassrochka' | 'slowly';
+  plan: 'ipoteka' | 'rassrochka' | 'slowly' | 'torg';
 }

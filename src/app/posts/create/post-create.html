@@ -1,8 +1,12 @@
+<div class="loader" *ngIf="loader"><span></span></div>
+
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-9">
                 <div class="card">
+                    
+                    
                     <div class="header">
                         <h4 class="title">Post Create</h4>
                         <br>
@@ -118,23 +122,24 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                      <label>Адресс</label>
+                                      <label>Адресс <br/><i class="foto-descr">Можете передвинуть красный ползунок для точного указания места расположения вашего адресса.</i></label>
+
                                       <input name="address" ngModel required placeholder="112 улица Ахунбаева, Бишкек, Киргизия" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search>
                                     </div>
                                 </div>
                             </div>
 
                             <agm-map 
-                              [latitude]="lat"
-                              [longitude]="lng"
-                              [zoom]="zoom"
+                              [latitude]="defaultData.lat"
+                              [longitude]="defaultData.lng"
+                              [zoom]="defaultData.zoom"
                               [disableDefaultUI]="false"
                               [zoomControl]="true"
                               (mapClick)="mapClicked($event)">
 
                               <agm-marker 
-                                [latitude]="lat"
-                                [longitude]="lng"
+                                [latitude]="defaultData.lat"
+                                [longitude]="defaultData.lng"
                                 [label]="'A'"
                                 [markerDraggable]="true"
                                 (dragEnd)="markerDragEnd($event)">
@@ -187,7 +192,7 @@
                                     <div class="form-group">
                                         <p>Продажа возможна</p>
                                         <span *ngFor="let item of typeOfPlan">
-                                            <input ngModel type="checkbox" id="{{item.value}}" name="{{item.value}}" [value]="item.value">
+                                            <input ngModel type="checkbox" [id]="item.value" [name]="item.value" [value]="item.value">
                                             <label for="{{item.value}}">{{item.name}}</label>
                                         </span>
                                     </div>
@@ -202,19 +207,16 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Дополнительный номер телефона</label>
-                                        <input required ngModel [textMask]="{mask: phoneMask, placeholderChar: '\u2000'}" ngModel name="extraPhone" class="form-control" type="text" placeholder="(551) 555-555"/>
+                                        <input ngModel [textMask]="{mask: phoneMask, placeholderChar: '\u2000'}" ngModel name="extraPhone" class="form-control" type="text" placeholder="(551) 555-555"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Воцап</label>
-                                        <input required ngModel [textMask]="{mask: phoneMask, placeholderChar: '\u2000'}" ngModel name="whatsapp" class="form-control" type="text" placeholder="(551) 555-556"/>
+                                        <input ngModel [textMask]="{mask: phoneMask, placeholderChar: '\u2000'}" ngModel name="whatsapp" class="form-control" type="text" placeholder="(551) 555-556"/>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div id="map" style="width: 600px; height: 400px"></div>
-
-
-                            <button [disabled]="!postForm.form.valid" class="zippy" type="submit" class="btn btn-info btn-fill pull-right">Разместить объявление</button>
+                            <button [routerLink]="['/admin/posts']" [disabled]="!postForm.form.valid" class="zippy" type="submit" class="btn btn-info btn-fill pull-right">Разместить объявление</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>

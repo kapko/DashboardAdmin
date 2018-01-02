@@ -1,4 +1,23 @@
 app-post-create {
+    .loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1;
+        height: 100%;
+        background: #fff;
+        padding-top: 20%;
+        span {
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: 0 auto;
+            background: #fff url('../img/loader.gif') no-repeat center center;
+            background-size: cover;
+        }
+    }
+
     agm-map {
         height: 400px;
     }

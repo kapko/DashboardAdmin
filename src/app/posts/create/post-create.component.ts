@@ -26,6 +26,7 @@ export class PostCreateComponent {
   typeOfFixes = typeOfFixes;
   typeOfPlan = typeOfPlan;
   typeOfCurrency = typeOfCurrency;
+  loader: boolean = false;
 
   defaultData = {
     accountType: 'owner',
@@ -35,6 +36,9 @@ export class PostCreateComponent {
     currency: 'dollar',
     typeOfRoom: 'elite',
     plan: 'slowly',
+    lat: 42.8746212,
+    lng: 74.5697617,
+    zoom: 17
   };
 
   images: ImageStructure[] = [];
@@ -46,34 +50,26 @@ export class PostCreateComponent {
     integerLimit: 3,
     decimalSymbol: ',',
     includeThousandsSeparator: false,
-    prefix: ''});
+    prefix: ''
+  });
 
   numberMask = createNumberMask({prefix: '', integerLimit: 9});
-
-  // google maps
-  public lat: number;
-  public lng: number;
-  public zoom: number = 17;
 
   constructor(
     private postService: PostService,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone
-  ) {
-    //set google maps defaults
-    this.lat = 42.8746212;
-    this.lng = 74.5697617;
-  }
+  ) {}
 
   mapClicked(event: any) {
-    this.lat = event.coords.lat;
-    this.lng = event.coords.lng;
+    this.defaultData.lat = event.coords.lat;
+    this.defaultData.lng = event.coords.lng;
   }
 
-  markerDragEnd($event: MouseEvent) {
-    console.log('dragEnd', $event);
+  markerDragEnd(event: any) {
+    this.defaultData.lat = event.coords.lat;
+    this.defaultData.lng = event.coords.lng;
   }
-
 
   ngOnInit() {
     //load Places Autocomplete
@@ -93,8 +89,8 @@ export class PostCreateComponent {
             return;
           }
           //set lat, lng and zoom
-          this.lat = place.geometry.location.lat();
-          this.lng = place.geometry.location.lng();
+          this.defaultData.lat = place.geometry.location.lat();
+          this.defaultData.lng = place.geometry.location.lng();
         });
       });
     }); // mapsAPILoader
@@ -140,14 +136,15 @@ export class PostCreateComponent {
   }
 
   submitForm(data: Post): void {
-    console.log(data);
-  // Promise.all(this.uploadImages())
-  //   .then((res: any) => {
-  //     data.created = + new Date();
-  //     data.images = res[0];
-  //     data.tumbnails = res[1];
-  //     this.postService.createPost(data);
-  //   });
+    Promise.all(this.uploadImages())
+      .then((res: any) => {
+        data.lat = this.defaultData.lat;
+        data.lng = this.defaultData.lng;
+        data.created = + new Date();
+        data.images = res[0];
+        data.tumbnails = res[1];
+        // save data
+        this.postService.createPost(data);
+      });
   }
-
 }
