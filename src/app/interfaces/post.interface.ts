@@ -1,5 +1,4 @@
 export interface Post {
-  title: string;
   description: string;
   accountType: 'owner' | 'agent';
   sellingType: 'rent' | 'sell' | 'buy';

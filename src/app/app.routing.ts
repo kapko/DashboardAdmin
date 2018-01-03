@@ -12,6 +12,7 @@ import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
 import { AppComponent } from './app.component';
+import { SignUpComponent } from 'app/signup/signup.component';
 
 const routes: Routes = [
   {
@@ -28,30 +29,13 @@ const routes: Routes = [
       }
     ]
   },
-  { path: 'dashboard', component: HomeComponent },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+  {
+    path: 'dashboard',
+    component: HomeComponent,
+  },
+  { path: 'login', component: SignUpComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
-
-// const routes: Routes = [
-//     { path: 'dashboard',      component: HomeComponent },
-//     { path: 'user',           component: UserComponent },
-//     { path: 'table',          component: TablesComponent },
-//     { path: 'typography',     component: TypographyComponent },
-//     { path: 'icons',          component: IconsComponent },
-//     { path: 'maps',           component: MapsComponent },
-//     { path: 'notifications',  component: NotificationsComponent },
-//     {
-//       path: 'upgrade',
-//       component: UpgradeComponent,
-//       children: [
-//         {
-//           path: 'posts',
-//           loadChildren: './posts/post.module#PostsModule'
-//         }
-//       ]
-//     },
-//     { path: '', redirectTo: 'hjk', pathMatch: 'full' }
-// ];
 
 @NgModule({
   imports: [

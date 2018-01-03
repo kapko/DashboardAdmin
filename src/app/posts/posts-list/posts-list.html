@@ -13,38 +13,45 @@
                           <table class="table table-hover table-striped">
                                 <thead>
                                     <tr>
-                                        <th *ngFor="let cell of tableData1.headerRow">{{ cell }}</th>
+                                        <th *ngFor="let cell of tableHeader">{{ cell }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let row of tableData1.dataRows">
-                                        <td *ngFor="let cell of row">{{cell}}</td>
+                                    <tr *ngFor="let item of posts">
+                                        <td>{{item.accountType}}</td>
+                                        <td>{{item.sellingType}}</td>
+                                        <td>{{item.forSell}}</td>
+                                        <td>{{item.typeOfRoom}}</td>
+                                        <td>{{item.flatCount}}</td>
+                                        <td>{{item.area}}</td>
+                                        <td>{{item.areaOfHouse}} 
+                                            <span *ngIf="!item.areaOfHouse">не указано</span>
+                                        </td>
+                                        <td>{{item.floor}} 
+                                            <span *ngIf="item?.floorOf">/ {{item.floorOf}}</span>
+                                        </td>
+                                        <td>{{item.fixes}}</td>
+                                        <td>{{item.address}}</td>
+                                        <td>
+                                            <span *ngIf="!item.images">нет</span>
+                                            <p class="tumbnails" *ngFor="let img of item.images">
+                                                <img [src]="img">
+                                            </p>
+                                        </td>
+                                        <td>{{item.description}}</td>
+                                        <td>{{item.price}} {{item.currency}}</td>
+                                        <td>возможность продажи</td>
+                                        <td>{{item.phone}}</td>
+                                        <td>{{item.extraPhone}}
+                                            <span *ngIf="!item.extraPhone">нет</span>
+                                        </td>
+                                        <td>{{item.whatsapp}}
+                                            <span *ngIf="!item.whatsapp">нет</span>
+                                        </td>
                                     </tr>
                                 </tbody>
                           </table>
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="card card-plain">
-                    <div class="header">
-                        <h4 class="title">Table on Plain Background</h4>
-                        <p class="category">Here is a subtitle for this table</p>
-                    </div>
-                    <div class="content table-responsive table-full-width">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th *ngFor="let cell of tableData2.headerRow">{{ cell }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let row of tableData2.dataRows">
-                                    <td *ngFor="let cell of row">{{cell}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>

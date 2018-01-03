@@ -20,6 +20,11 @@ import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireModule } from 'angularfire2';
+import { dbConfig } from 'app/configs/db';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { SignUpComponent } from 'app/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -31,8 +36,8 @@ import { UpgradeComponent } from './upgrade/upgrade.component';
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    UpgradeComponent
-
+    UpgradeComponent,
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +49,9 @@ import { UpgradeComponent } from './upgrade/upgrade.component';
     RouterModule,
     AppRoutingModule,
     LbdModule,
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(dbConfig),
   ],
   providers: [],
   bootstrap: [AppComponent]

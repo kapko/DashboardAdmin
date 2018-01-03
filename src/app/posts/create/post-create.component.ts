@@ -83,7 +83,7 @@ export class PostCreateComponent {
         this.ngZone.run(() => {
           //get the place result
           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-  
+
           //verify result
           if (place.geometry === undefined || place.geometry === null) {
             return;
@@ -112,39 +112,32 @@ export class PostCreateComponent {
 
   // return promise of array
   uploadImages(): Array<any> {
-    const urls = [],
-      tumbnails = [];
+    const urls = [];
 
     this.images.forEach(image => {
       // upload origin pictures
       urls.push(
         this.postService
           .uploadPicture(image.fileName, image.file)
-          .then(res => res.downloadURL));
-
-      // upload tumbnails 480x480
-      this.postService.thumbnailify(image.file, 480, respose => {
-        tumbnails.push(
-          this.postService
-            .uploadPicture(`t480_${image.fileName}`, respose)
-            .then(res => res.downloadURL));
-      });
-
+          .then(res => res.downloadURL)
+        );
     });
 
-    return [urls, tumbnails];
+    return urls;
   }
 
   submitForm(data: Post): void {
+    this.loader = true;
     Promise.all(this.uploadImages())
       .then((res: any) => {
+        data.address = this.searchElementRef.nativeElement.value;
         data.lat = this.defaultData.lat;
         data.lng = this.defaultData.lng;
         data.created = + new Date();
-        data.images = res[0];
-        data.tumbnails = res[1];
+        data.images = res;
         // save data
         this.postService.createPost(data);
+        this.loader = false;
       });
   }
 }
