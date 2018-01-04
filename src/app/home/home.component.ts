@@ -4,6 +4,7 @@ import { LegendItem, ChartType } from '../lbd/lbd-chart/lbd-chart.component';
 import * as Chartist from 'chartist';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,14 @@ export class HomeComponent implements OnInit {
     public activityChartResponsive: any[];
     public activityChartLegendItems: LegendItem[];
   constructor(
+    private af: AngularFireAuth,
+    private router: Router,
   ) {
+    setTimeout(() => {
+      if (this.af.auth.currentUser === null) {
+        this.router.navigate(['/login']);
+      }
+    }, 600);
   }
 
   ngOnInit() {

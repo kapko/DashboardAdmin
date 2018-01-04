@@ -14,15 +14,7 @@ export class SignUpComponent {
   constructor(
     private af: AngularFireAuth,
     private router: Router,
-  ) {
-    setTimeout(() => {
-      if (this.af.auth.currentUser === null) {
-        alert('Пожалуйста введите логин и пароль');
-      } else {
-        this.router.navigate(['/dashboard']);
-      }
-    }, 600);
-  }
+  ) { }
 
   signIn(): void {
     this.af.auth.signInWithEmailAndPassword(this.data.login, this.data.password)

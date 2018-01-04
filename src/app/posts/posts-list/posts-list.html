@@ -17,7 +17,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of posts">
+                                    <tr *ngFor="let item of posts | paginate: { itemsPerPage: 15, currentPage: p }">
+                                        <td class="slider">
+                                            <span *ngIf="!item.images?.length">нет</span>
+                                            <ngx-carousel
+                                            *ngIf="item.images?.length"
+                                            [inputs]="carouselOne">
+                                                <ngx-item NgxCarouselItem *ngFor="let img of item.images">
+                                                  <h2><img [src]="img"></h2>
+                                                </ngx-item>
+                                                <button NgxCarouselPrev class='leftRs'>&lt;</button>
+                                                <button NgxCarouselNext class='rightRs'>&gt;</button>
+                                            </ngx-carousel>
+                                        </td>
                                         <td>{{item.accountType}}</td>
                                         <td>{{item.sellingType}}</td>
                                         <td>{{item.forSell}}</td>
@@ -27,17 +39,11 @@
                                         <td>{{item.areaOfHouse}} 
                                             <span *ngIf="!item.areaOfHouse">не указано</span>
                                         </td>
-                                        <td>{{item.floor}} 
-                                            <span *ngIf="item?.floorOf">/ {{item.floorOf}}</span>
+                                        <td>{{item?.floor}} 
+                                            <span *ngIf="item?.floorOf">/ {{item?.floorOf}}</span>
                                         </td>
                                         <td>{{item.fixes}}</td>
                                         <td>{{item.address}}</td>
-                                        <td>
-                                            <span *ngIf="!item.images">нет</span>
-                                            <p class="tumbnails" *ngFor="let img of item.images">
-                                                <img [src]="img">
-                                            </p>
-                                        </td>
                                         <td>{{item.description}}</td>
                                         <td>{{item.price}} {{item.currency}}</td>
                                         <td>возможность продажи</td>
@@ -51,6 +57,7 @@
                                     </tr>
                                 </tbody>
                           </table>
+                          <pagination-controls (pageChange)="p = $event"></pagination-controls>
 
                     </div>
                 </div>

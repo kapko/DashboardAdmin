@@ -30,11 +30,11 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'dashboard',
-    component: HomeComponent,
+    path: 'login',
+    component: SignUpComponent,
   },
-  { path: 'login', component: SignUpComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: 'dashboard', component: HomeComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 
 @NgModule({
