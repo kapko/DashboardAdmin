@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { Router } from '@angular/router';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -20,6 +22,8 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
 
   constructor(
+      private af: AngularFireAuth,
+      private router: Router
   ) {}
 
   ngOnInit() {
@@ -31,4 +35,9 @@ export class SidebarComponent implements OnInit {
       }
       return true;
   };
+
+  logout(): void {
+    this.af.auth.signOut();
+    window.location.reload();
+  }
 }
