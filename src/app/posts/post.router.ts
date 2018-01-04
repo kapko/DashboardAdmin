@@ -12,6 +12,13 @@ const routes: Routes = [
     }
   },
   {
+    path: ':id/edit',
+    component: PostCreateComponent,
+    data: {
+      title: 'Posts Edit'
+    }
+  },
+  {
     path: 'create',
     component: PostCreateComponent,
     data: {

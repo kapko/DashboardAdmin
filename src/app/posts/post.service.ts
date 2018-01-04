@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { Promise } from 'firebase/app';
 import { Post } from '../interfaces/post.interface';
 import * as firebase from 'firebase';
@@ -20,6 +20,10 @@ export class PostService {
 
   getListPosts(): FirebaseListObservable<any> {
     return this.db.list(this.postPath);
+  }
+
+  getPost(postId: string): FirebaseObjectObservable<any> {
+    return this.db.object(this.postPath + postId);
   }
 
   createPost(postData: Post): Promise<any> {

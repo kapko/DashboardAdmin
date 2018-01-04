@@ -54,6 +54,11 @@
                                         <td>{{item.whatsapp}}
                                             <span *ngIf="!item.whatsapp">нет</span>
                                         </td>
+                                        <td>
+                                            <b [routerLink]="[item.$key, 'edit']">редактировать</b>
+                                            <b>удалить</b>
+                                            <b>Опубликовать</b>
+                                        </td>
                                     </tr>
                                 </tbody>
                           </table>

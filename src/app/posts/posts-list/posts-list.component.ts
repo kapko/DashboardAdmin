@@ -36,6 +36,7 @@ export class PostListComponent {
     'Ном. тел.',
     'Доп. тел.',
     'Воцап',
+    'Опции',
   ];
 
   constructor(
