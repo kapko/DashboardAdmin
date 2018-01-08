@@ -6,11 +6,12 @@ import { Subject } from 'rxjs/Subject';
 // local
 import { Post } from '../../interfaces/post.interface';
 import { PostService } from 'app/posts/post.service';
-import { Promise } from 'firebase/app';
 import { forSell, typeOfRooms, typeOfFixes, typeOfPlan, typeOfCurrency } from '../post';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormArray } from '@angular/forms/src/model';
+// firebase
+import * as firebase from 'firebase';
 
 export interface ImageStructure {
   fileName: string;
@@ -35,13 +36,6 @@ export class PostCreateComponent {
   loader: boolean = false;
 
   defaultData = {
-    accountType: 'owner',
-    sellingType: 'sell',
-    forSell: 'room',
-    fixes: 'none',
-    currency: 'dollar',
-    typeOfRoom: 'elite',
-    plan: 'slowly',
     lat: 42.8746212,
     lng: 74.5697617,
     zoom: 17
@@ -83,12 +77,23 @@ export class PostCreateComponent {
     this.postGroup = new FormGroup({
       accountType: new FormControl('', [Validators.required]),
       sellingType: new FormControl('', [Validators.required]),
+      forSell: new FormControl('', [Validators.required]),
+      typeOfRoom: new FormControl(''),
+      flatCount: new FormControl('', [Validators.required]),
+      area: new FormControl('', [Validators.required]),
+      areaOfHouse: new FormControl(''),
+      floor: new FormControl('', [Validators.required]),
+      floorOf: new FormControl(''),
+      fixes: new FormControl(''),
+      address: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      price: new FormControl('', [Validators.required]),
+      currency: new FormControl(''),
+      typeOfPlan: new FormControl(''),
+      whatsapp: new FormControl(''),
+      extraPhone: new FormControl(''),
+      phone: new FormControl('', [Validators.required]),
     });
-
-    this.postGroup.controls['accountType'].setValue('owner');
-    this.postGroup.controls['sellingType'].setValue('sell');
-
-
 
     // get post id
     this.subscription = this.activeRouter.params
@@ -117,34 +122,40 @@ export class PostCreateComponent {
     this.defaultData.lng = event.coords.lng;
   }
 
-  // ngOnInit() {
-  //   //load Places Autocomplete
-  //   this.mapsAPILoader.load().then(() => {
-  //     let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-  //       types: ['address'],
-  //       componentRestrictions: {country: "kgz"}
-  //     });
+  ngOnInit() {
+    //load Places Autocomplete
+    this.mapsAPILoader.load().then(() => {
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ['address'],
+        componentRestrictions: {country: "kgz"}
+      });
 
-  //     autocomplete.addListener('place_changed', () => {
-  //       this.ngZone.run(() => {
-  //         //get the place result
-  //         let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+      autocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 
-  //         //verify result
-  //         if (place.geometry === undefined || place.geometry === null) {
-  //           return;
-  //         }
-  //         //set lat, lng and zoom
-  //         this.defaultData.lat = place.geometry.location.lat();
-  //         this.defaultData.lng = place.geometry.location.lng();
-  //       });
-  //     });
-  //   }); // mapsAPILoader
-  // }
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          //set lat, lng and zoom
+          this.defaultData.lat = place.geometry.location.lat();
+          this.defaultData.lng = place.geometry.location.lng();
+        });
+      });
+    }); // mapsAPILoader
+  }
 
   // upload files
   onUploadFinished(event: any): void {
     this.images.push({fileName: event.file.name, file: event.src});
+    this.postService
+      .uploadPicture(event.file.name, event.src)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log('ERR: ', err));
   }
 
   // remove images from array

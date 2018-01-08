@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
-import { Promise } from 'firebase/app';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Post } from '../interfaces/post.interface';
 import * as firebase from 'firebase';
 import { promise } from 'selenium-webdriver';
@@ -22,18 +21,18 @@ export class PostService {
     return this.db.list(this.postPath);
   }
 
-  getPost(postId: string): FirebaseObjectObservable<any> {
+  getPost(postId: string): any {
     return this.db.object(this.postPath + postId);
   }
 
-  createPost(postData: Post): Promise<any> {
+  createPost(postData: Post): any {
     return this.db
       .list(this.postPath)
       .push(postData);
   }
 
   // upload picture fileName path, return Promise
-  uploadPicture(fileName: string, file: string): Promise<any> {
+  uploadPicture(fileName: string, file: string): any {
     return firebase
       .storage()
       .ref()
@@ -42,7 +41,7 @@ export class PostService {
   }
 
   // delete with fileName path, return Promise
-  deletePicture(fileName: string): Promise<any> {
+  deletePicture(fileName: string): any {
     return firebase.storage().ref().child(this.storageImagePath + fileName).delete();
   }
 

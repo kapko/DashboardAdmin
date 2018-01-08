@@ -31,11 +31,11 @@ export class HomeComponent implements OnInit {
     private af: AngularFireAuth,
     private router: Router,
   ) {
-    setTimeout(() => {
-      if (this.af.auth.currentUser === null) {
-        this.router.navigate(['/login']);
-      }
-    }, 600);
+    // setTimeout(() => {
+    //   if (this.af.auth.currentUser === null) {
+    //     this.router.navigate(['/login']);
+    //   }
+    // }, 600);
   }
 
   ngOnInit() {

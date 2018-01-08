@@ -20,11 +20,14 @@ import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
+import { SignUpComponent } from 'app/signup/signup.component';
+
+//firebase
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
-import { dbConfig } from 'app/configs/db';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { SignUpComponent } from 'app/signup/signup.component';
+import { dbConfig } from 'app/configs/db';
+import 'firebase/storage';
 
 @NgModule({
   declarations: [
@@ -49,11 +52,14 @@ import { SignUpComponent } from 'app/signup/signup.component';
     RouterModule,
     AppRoutingModule,
     LbdModule,
+
+    // firebase
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(dbConfig),
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

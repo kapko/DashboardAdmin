@@ -43,9 +43,7 @@ export class PostListComponent {
     private postService: PostService,
   ) {
     this.postService.getListPosts()
-      .subscribe(posts => {
-        this.posts = posts;
-      });
+      .subscribe(posts => this.posts = posts);
   }
 
   ngOnInit() {

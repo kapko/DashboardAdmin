@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { Promise } from 'firebase/app';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Post } from '../interfaces/post.interface';
 import { FirebaseApp } from 'angularfire2';
 import * as firebase from 'firebase';

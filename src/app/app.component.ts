@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  showSidebar: boolean = false;
+  showSidebar: boolean = true;
 
   subscription: Subscription;
 
