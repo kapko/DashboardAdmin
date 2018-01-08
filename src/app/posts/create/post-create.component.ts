@@ -150,12 +150,6 @@ export class PostCreateComponent {
   // upload files
   onUploadFinished(event: any): void {
     this.images.push({fileName: event.file.name, file: event.src});
-    this.postService
-      .uploadPicture(event.file.name, event.src)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => console.log('ERR: ', err));
   }
 
   // remove images from array
@@ -184,18 +178,18 @@ export class PostCreateComponent {
   }
 
   submitForm(data: Post): void {
-    console.log(data);
     // this.loader = true;
-    // Promise.all(this.uploadImages())
-    //   .then((res: any) => {
-    //     data.address = this.searchElementRef.nativeElement.value;
-    //     data.lat = this.defaultData.lat;
-    //     data.lng = this.defaultData.lng;
-    //     data.created = + new Date();
-    //     data.images = res;
-    //     // save data
-    //     this.postService.createPost(data);
-    //     this.loader = false;
-    //   });
+    Promise.all(this.uploadImages())
+      .then((res: any) => {
+        console.log(res);
+        // data.address = this.searchElementRef.nativeElement.value;
+        // data.lat = this.defaultData.lat;
+        // data.lng = this.defaultData.lng;
+        // data.created = + new Date();
+        // data.images = res;
+        // save data
+        // this.postService.createPost(data);
+        // this.loader = false;
+      });
   }
 }
