@@ -34,7 +34,7 @@ const routes: Routes = [
     component: SignUpComponent,
   },
   { path: 'dashboard', component: HomeComponent },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({

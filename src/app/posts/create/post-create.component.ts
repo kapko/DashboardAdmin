@@ -75,8 +75,8 @@ export class PostCreateComponent {
     this.subject = new Subject();
 
     this.postGroup = new FormGroup({
-      accountType: new FormControl('', [Validators.required]),
-      sellingType: new FormControl('', [Validators.required]),
+      accountType: new FormControl('owner', [Validators.required]),
+      sellingType: new FormControl('sell', [Validators.required]),
       forSell: new FormControl('', [Validators.required]),
       typeOfRoom: new FormControl(''),
       flatCount: new FormControl('', [Validators.required]),
@@ -84,11 +84,11 @@ export class PostCreateComponent {
       areaOfHouse: new FormControl(''),
       floor: new FormControl('', [Validators.required]),
       floorOf: new FormControl(''),
-      fixes: new FormControl(''),
+      fixes: new FormControl('none'),
       address: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       price: new FormControl('', [Validators.required]),
-      currency: new FormControl(''),
+      currency: new FormControl('dollar'),
       typeOfPlan: new FormControl(''),
       whatsapp: new FormControl(''),
       extraPhone: new FormControl(''),
@@ -178,18 +178,18 @@ export class PostCreateComponent {
   }
 
   submitForm(data: Post): void {
-    // this.loader = true;
+    this.loader = true;
     Promise.all(this.uploadImages())
       .then((res: any) => {
-        console.log(res);
-        // data.address = this.searchElementRef.nativeElement.value;
-        // data.lat = this.defaultData.lat;
-        // data.lng = this.defaultData.lng;
-        // data.created = + new Date();
-        // data.images = res;
+        data.address = this.searchElementRef.nativeElement.value;
+        data.lat = this.defaultData.lat;
+        data.lng = this.defaultData.lng;
+        data.created = + new Date();
+        data.images = res;
+        console.log(data);
         // save data
         // this.postService.createPost(data);
-        // this.loader = false;
+        this.loader = false;
       });
   }
 }

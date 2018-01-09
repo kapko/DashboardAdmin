@@ -18,12 +18,10 @@ export class SignUpComponent {
 
   signIn(): void {
     this.af.auth.signInWithEmailAndPassword(this.data.login, this.data.password)
-      .then(res => this.router.navigate(['/dashboard']))
+      .then(res => {
+        localStorage.setItem('uid', res.uid);
+        this.router.navigate(['/dashboard']);
+      })
       .catch(err => console.log(err));
   }
-
-  signOut(): void {
-    this.af.auth.signOut();
-  }
-
 }

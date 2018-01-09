@@ -38,6 +38,7 @@ export class SidebarComponent implements OnInit {
 
   logout(): void {
     this.af.auth.signOut();
+    localStorage.removeItem('uid');
     window.location.reload();
   }
 }
