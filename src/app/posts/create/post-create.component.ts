@@ -2,7 +2,9 @@ import { Component, NgZone, ElementRef, ViewChild } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/first';
+import 'rxjs';
+
 // local
 import { Post } from '../../interfaces/post.interface';
 import { PostService } from 'app/posts/post.service';
@@ -37,7 +39,8 @@ export class PostCreateComponent {
   defaultData = {
     lat: 42.8746212,
     lng: 74.5697617,
-    zoom: 13
+    zoom: 13,
+    images: []
   };
 
   images: ImageStructure[] = [];
@@ -58,9 +61,7 @@ export class PostCreateComponent {
 
   uid: string;
 
-  subject: Subject<any>;
-
-  post: Post;
+  postKey: string;
 
   postGroup: FormGroup;
 
@@ -71,7 +72,7 @@ export class PostCreateComponent {
     private router: Router,
     private activeRouter: ActivatedRoute,
   ) {
-    this.subject = new Subject();
+    this.defaultData.images = [];
 
     this.postGroup = new FormGroup({
       accountType: new FormControl('agent', [Validators.required]),
@@ -102,12 +103,34 @@ export class PostCreateComponent {
       });
 
     if (this.uid) {
-      this.postService.getPost(this.uid)
+      this.postService
+        .getPost(this.uid)
+        .first()
         .subscribe((post: Post) => {
+          this.postKey = post.$key;
+          this.defaultData.lat = post.lat;
+          this.defaultData.lng = post.lng;
+          this.defaultData.zoom = 17;
+          if (post.images) { this.defaultData.images = post.images; }
           this.postGroup.controls['accountType'].setValue(post.accountType);
           this.postGroup.controls['sellingType'].setValue(post.sellingType);
+          this.postGroup.controls['forSell'].setValue(post.forSell);
+          this.postGroup.controls['typeOfRoom'].setValue(post.typeOfRoom);
+          this.postGroup.controls['flatCount'].setValue(post.flatCount);
+          this.postGroup.controls['area'].setValue(post.area);
+          this.postGroup.controls['areaOfHouse'].setValue(post.areaOfHouse);
+          this.postGroup.controls['floor'].setValue(post.floor);
+          this.postGroup.controls['floorOf'].setValue(post.floorOf);
+          this.postGroup.controls['fixes'].setValue(post.fixes);
+          this.postGroup.controls['address'].setValue(post.address);
+          this.postGroup.controls['description'].setValue(post.description);
+          this.postGroup.controls['price'].setValue(post.price);
+          this.postGroup.controls['currency'].setValue(post.currency);
+          this.postGroup.controls['typeOfPlan'].setValue(post.typeOfPlan);
+          this.postGroup.controls['whatsapp'].setValue(post.whatsapp);
+          this.postGroup.controls['extraPhone'].setValue(post.extraPhone);
+          this.postGroup.controls['phone'].setValue(post.phone);
 
-          this.subject.complete();
         });
     }
   }
@@ -149,16 +172,31 @@ export class PostCreateComponent {
 
   // upload files
   onUploadFinished(event: any): void {
-    this.images.push({fileName: event.file.name, file: event.src});
+    this.images.push({fileName: `${event.file.name}-${Date.now()}`, file: event.src});
   }
 
   // remove images from array
   onRemoved(event: any): void {
-    this.images.forEach(item => {
-      if (item.fileName === event.file.name) {
-        this.images.splice(this.images.indexOf(item), 1);
-      }
-    });
+    // clean image Array [{flieName, fileBase64}]
+    if (this.images && this.images.length) {
+      this.images.forEach((item: any) => {
+        if (item.fileName.indexOf(event.file.name) >= 0) {
+          this.images.splice(this.images.indexOf(item), 1);
+        }
+      });
+    }
+
+    // remove filename from downloaded pictures arrray[fileName]
+    if (this.uid) {
+      let fileName = firebase.storage().refFromURL(event.file.name).name;
+      this.postService.deletePicture(fileName);
+
+      this.defaultData.images.forEach(item => {
+        if (item.indexOf(event.file.name) >= 0) {
+          this.defaultData.images.splice(this.images.indexOf(item), 1);
+        }
+      });
+    }
   }
 
   // return promise of array
@@ -178,18 +216,42 @@ export class PostCreateComponent {
   }
 
   submitForm(data: Post): void {
-    this.loader = true;
     Promise.all(this.uploadImages())
       .then((res: any) => {
         data.address = this.searchElementRef.nativeElement.value;
         data.lat = this.defaultData.lat;
         data.lng = this.defaultData.lng;
         data.created = + new Date();
-        data.images = res;
+        data.images = (this.defaultData.images && this.defaultData.images.length)
+        ? res.concat(this.defaultData.images) : res;
         // save data
-        this.postService.createPost(data);
-        this.loader = false;
-        this.router.navigate(['/admin/posts']);
+        console.log(data);
+        if (!this.uid) {
+          this.postService.createPost(data);
+        } else {
+          this.postService.updatePost(data, this.postKey);
+        }
       });
   }
+
+  // submitForm(data: Post): void {
+  //   this.loader = true;
+  //   Promise.all(this.uploadImages())
+  //     .then((res: any) => {
+  //       data.address = this.searchElementRef.nativeElement.value;
+  //       data.lat = this.defaultData.lat;
+  //       data.lng = this.defaultData.lng;
+  //       data.created = + new Date();
+  //       data.images = (this.defaultData.images && this.defaultData.images.length)
+  //       ? res.concat(this.defaultData.images) : res;
+  //       // save data
+  //       if (!this.uid) {
+  //         this.postService.createPost(data);
+  //       } else {
+  //         this.postService.updatePost(data, this.postKey);
+  //       }
+  //       this.loader = false;
+  //       this.router.navigate(['/admin/posts']);
+  //     });
+  // }
 }

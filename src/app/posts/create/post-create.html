@@ -145,6 +145,7 @@
                                     <label>Фото <br /><i class="foto-descr">Не допускаются к размещению фотографии с водяными знаками, чужих объектов и рекламные баннеры. JPG, PNG или GIF. Максимальный размер файла 10 мб, максимальное количество фотографий не должен превышать 10 штук</i></label>
                                     <image-upload
                                         [max]="10"
+                                        [uploadedFiles]="defaultData.images"
                                         [buttonCaption]="'Выберите файл'"
                                         (uploadFinished)="onUploadFinished($event)"
                                         (removed)="onRemoved($event)"
