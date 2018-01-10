@@ -9,7 +9,6 @@ import { PostService } from 'app/posts/post.service';
 import { forSell, typeOfRooms, typeOfFixes, typeOfPlan, typeOfCurrency } from '../post';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { FormArray } from '@angular/forms/src/model';
 // firebase
 import * as firebase from 'firebase';
 
@@ -38,7 +37,7 @@ export class PostCreateComponent {
   defaultData = {
     lat: 42.8746212,
     lng: 74.5697617,
-    zoom: 17
+    zoom: 13
   };
 
   images: ImageStructure[] = [];
@@ -57,7 +56,7 @@ export class PostCreateComponent {
 
   subscription: Subscription;
 
-  postId: string;
+  uid: string;
 
   subject: Subject<any>;
 
@@ -75,7 +74,7 @@ export class PostCreateComponent {
     this.subject = new Subject();
 
     this.postGroup = new FormGroup({
-      accountType: new FormControl('owner', [Validators.required]),
+      accountType: new FormControl('agent', [Validators.required]),
       sellingType: new FormControl('sell', [Validators.required]),
       forSell: new FormControl('', [Validators.required]),
       typeOfRoom: new FormControl(''),
@@ -98,14 +97,15 @@ export class PostCreateComponent {
     // get post id
     this.subscription = this.activeRouter.params
       .subscribe(params => {
-        this.postId = params.id;
+        this.uid = params.id;
         this.subscription && this.subscription.unsubscribe();
       });
 
-    if (this.postId) {
-      this.postService.getPost(this.postId)
+    if (this.uid) {
+      this.postService.getPost(this.uid)
         .subscribe((post: Post) => {
-          console.log('post = ', post);
+          this.postGroup.controls['accountType'].setValue(post.accountType);
+          this.postGroup.controls['sellingType'].setValue(post.sellingType);
 
           this.subject.complete();
         });
@@ -186,10 +186,10 @@ export class PostCreateComponent {
         data.lng = this.defaultData.lng;
         data.created = + new Date();
         data.images = res;
-        console.log(data);
         // save data
-        // this.postService.createPost(data);
+        this.postService.createPost(data);
         this.loader = false;
+        this.router.navigate(['/admin/posts']);
       });
   }
 }

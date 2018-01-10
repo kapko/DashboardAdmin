@@ -21,8 +21,8 @@ export class PostService {
     return this.db.list(this.postPath);
   }
 
-  getPost(postId: string): any {
-    return this.db.object(this.postPath + postId);
+  getPost(uid: string): any {
+    return this.db.object(this.postPath + uid);
   }
 
   createPost(postData: Post): any {
